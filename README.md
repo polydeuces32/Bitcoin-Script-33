@@ -49,7 +49,7 @@ Simply open `index.html` in your web browser - no setup required!
 ### Option 2: Local Development Server
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/bitcoin-script-playground.git
+git clone https://github.com/polydeuces32/bitcoin-script-playground.git
 cd bitcoin-script-playground
 
 # Start local server
@@ -175,9 +175,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/yourusername/bitcoin-script-playground/issues)
-- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/yourusername/bitcoin-script-playground/discussions)
-- 📧 **Contact**: [your-email@example.com](mailto:your-email@example.com)
+- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/polydeuces32/bitcoin-script-playground/issues)
+- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/polydeuces32/bitcoin-script-playground/discussions)
+- 📧 **Contact**: [polydeuces32@github.com](mailto:polydeuces32@github.com)
 
 ---
 
@@ -187,6 +187,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Made with ❤️ for the Bitcoin community
 
-[🌐 Live Demo](https://yourusername.github.io/bitcoin-script-playground) | [📖 Documentation](https://github.com/yourusername/bitcoin-script-playground/wiki) | [🐦 Twitter](https://twitter.com/yourusername)
+[🌐 Live Demo](https://polydeuces32.github.io/bitcoin-script-playground) | [📖 Documentation](https://github.com/polydeuces32/bitcoin-script-playground/wiki) | [🐦 Twitter](https://twitter.com/polydeuces32)
 
 </div>

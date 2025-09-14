@@ -23,16 +23,16 @@
     "stack",
     "programming"
   ],
-  "author": "Your Name <your.email@example.com>",
+  "author": "polydeuces32 <polydeuces32@github.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/bitcoin-script-playground.git"
+    "url": "https://github.com/polydeuces32/bitcoin-script-playground.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/bitcoin-script-playground/issues"
+    "url": "https://github.com/polydeuces32/bitcoin-script-playground/issues"
   },
-  "homepage": "https://github.com/yourusername/bitcoin-script-playground#readme",
+  "homepage": "https://github.com/polydeuces32/bitcoin-script-playground#readme",
   "devDependencies": {
     "live-server": "^1.2.2",
     "serve": "^14.2.1"
