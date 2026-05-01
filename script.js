@@ -1,535 +1,429 @@
-// Bitcoin Script Playground - Interactive Learning Platform
+'use strict';
+
 class BitcoinScriptEngine {
-    constructor() {
-        this.stack = [];
-        this.opcodes = this.initializeOpcodes();
-        this.sampleScripts = this.initializeSampleScripts();
-        this.initializeUI();
-    }
+  constructor() {
+    this.stack = [];
+    this.opcodes = this.initializeOpcodes();
+    this.sampleScripts = this.initializeSampleScripts();
+  }
 
-    initializeOpcodes() {
-        return {
-            // Stack manipulation
-            'OP_DUP': {
-                name: 'OP_DUP',
-                description: 'Duplicates the top stack item',
-                category: 'Stack',
-                execute: () => this.dup()
-            },
-            'OP_2DUP': {
-                name: 'OP_2DUP',
-                description: 'Duplicates the top two stack items',
-                category: 'Stack',
-                execute: () => this.dup2()
-            },
-            'OP_DROP': {
-                name: 'OP_DROP',
-                description: 'Removes the top stack item',
-                category: 'Stack',
-                execute: () => this.drop()
-            },
-            'OP_SWAP': {
-                name: 'OP_SWAP',
-                description: 'Swaps the top two stack items',
-                category: 'Stack',
-                execute: () => this.swap()
-            },
-            'OP_OVER': {
-                name: 'OP_OVER',
-                description: 'Copies the second-to-top item to the top',
-                category: 'Stack',
-                execute: () => this.over()
-            },
-            'OP_ROT': {
-                name: 'OP_ROT',
-                description: 'Rotates the top 3 stack items',
-                category: 'Stack',
-                execute: () => this.rot()
-            },
+  initializeOpcodes() {
+    return {
+      OP_DUP: { description: 'Duplicate the top stack item', category: 'Stack', execute: () => this.dup() },
+      OP_2DUP: { description: 'Duplicate the top two stack items', category: 'Stack', execute: () => this.dup2() },
+      OP_DROP: { description: 'Remove the top stack item', category: 'Stack', execute: () => this.drop() },
+      OP_SWAP: { description: 'Swap the top two stack items', category: 'Stack', execute: () => this.swap() },
+      OP_OVER: { description: 'Copy the second-to-top item to the top', category: 'Stack', execute: () => this.over() },
+      OP_ROT: { description: 'Rotate the top three stack items', category: 'Stack', execute: () => this.rot() },
 
-            // Arithmetic
-            'OP_ADD': {
-                name: 'OP_ADD',
-                description: 'Adds the top two stack items',
-                category: 'Arithmetic',
-                execute: () => this.add()
-            },
-            'OP_SUB': {
-                name: 'OP_SUB',
-                description: 'Subtracts the second item from the first',
-                category: 'Arithmetic',
-                execute: () => this.sub()
-            },
-            'OP_MUL': {
-                name: 'OP_MUL',
-                description: 'Multiplies the top two stack items',
-                category: 'Arithmetic',
-                execute: () => this.mul()
-            },
-            'OP_DIV': {
-                name: 'OP_DIV',
-                description: 'Divides the second item by the first',
-                category: 'Arithmetic',
-                execute: () => this.div()
-            },
-            'OP_MOD': {
-                name: 'OP_MOD',
-                description: 'Returns the remainder of division',
-                category: 'Arithmetic',
-                execute: () => this.mod()
-            },
+      OP_ADD: { description: 'Add the top two numeric values', category: 'Arithmetic', execute: () => this.add() },
+      OP_SUB: { description: 'Subtract the top value from the second value', category: 'Arithmetic', execute: () => this.sub() },
+      OP_MUL: { description: 'Educational-only multiply operation', category: 'Arithmetic', execute: () => this.mul() },
+      OP_DIV: { description: 'Educational-only integer division operation', category: 'Arithmetic', execute: () => this.div() },
+      OP_MOD: { description: 'Educational-only modulo operation', category: 'Arithmetic', execute: () => this.mod() },
 
-            // Comparison
-            'OP_EQUAL': {
-                name: 'OP_EQUAL',
-                description: 'Returns 1 if top two items are equal',
-                category: 'Comparison',
-                execute: () => this.equal()
-            },
-            'OP_EQUALVERIFY': {
-                name: 'OP_EQUALVERIFY',
-                description: 'Same as OP_EQUAL but runs OP_VERIFY afterward',
-                category: 'Comparison',
-                execute: () => this.equalVerify()
-            },
-            'OP_1EQUAL': {
-                name: 'OP_1EQUAL',
-                description: 'Returns 1 if input is 1, 0 otherwise',
-                category: 'Comparison',
-                execute: () => this.oneEqual()
-            },
-            'OP_0NOTEQUAL': {
-                name: 'OP_0NOTEQUAL',
-                description: 'Returns 1 if input is not 0, 0 otherwise',
-                category: 'Comparison',
-                execute: () => this.zeroNotEqual()
-            },
+      OP_EQUAL: { description: 'Return 1 when the top two items are equal, else 0', category: 'Comparison', execute: () => this.equal() },
+      OP_EQUALVERIFY: { description: 'Run OP_EQUAL followed by OP_VERIFY', category: 'Comparison', execute: () => this.equalVerify() },
+      OP_1EQUAL: { description: 'Return 1 when the top item equals 1, else 0', category: 'Comparison', execute: () => this.oneEqual() },
+      OP_0NOTEQUAL: { description: 'Return 1 when the top item is not 0, else 0', category: 'Comparison', execute: () => this.zeroNotEqual() },
 
-            // Bitwise operations
-            'OP_AND': {
-                name: 'OP_AND',
-                description: 'Bitwise AND of the top two items',
-                category: 'Bitwise',
-                execute: () => this.and()
-            },
-            'OP_OR': {
-                name: 'OP_OR',
-                description: 'Bitwise OR of the top two items',
-                category: 'Bitwise',
-                execute: () => this.or()
-            },
-            'OP_XOR': {
-                name: 'OP_XOR',
-                description: 'Bitwise XOR of the top two items',
-                category: 'Bitwise',
-                execute: () => this.xor()
-            },
-            'OP_NOT': {
-                name: 'OP_NOT',
-                description: 'Bitwise NOT of the top item',
-                category: 'Bitwise',
-                execute: () => this.not()
-            },
+      OP_AND: { description: 'Educational-only bitwise AND', category: 'Bitwise', execute: () => this.and() },
+      OP_OR: { description: 'Educational-only bitwise OR', category: 'Bitwise', execute: () => this.or() },
+      OP_XOR: { description: 'Educational-only bitwise XOR', category: 'Bitwise', execute: () => this.xor() },
+      OP_NOT: { description: 'Return 1 for 0, otherwise 0', category: 'Logical', execute: () => this.not() },
+      OP_BOOLAND: { description: 'Boolean AND of the top two stack items', category: 'Logical', execute: () => this.boolAnd() },
+      OP_BOOLOR: { description: 'Boolean OR of the top two stack items', category: 'Logical', execute: () => this.boolOr() },
 
-            // Logical operations
-            'OP_BOOLAND': {
-                name: 'OP_BOOLAND',
-                description: 'Boolean AND of the top two items',
-                category: 'Logical',
-                execute: () => this.boolAnd()
-            },
-            'OP_BOOLOR': {
-                name: 'OP_BOOLOR',
-                description: 'Boolean OR of the top two items',
-                category: 'Logical',
-                execute: () => this.boolOr()
-            },
+      OP_0: { description: 'Push 0 onto the stack', category: 'Constants', execute: () => this.push('0') },
+      OP_1: { description: 'Push 1 onto the stack', category: 'Constants', execute: () => this.push('1') },
+      OP_2: { description: 'Push 2 onto the stack', category: 'Constants', execute: () => this.push('2') },
+      OP_3: { description: 'Push 3 onto the stack', category: 'Constants', execute: () => this.push('3') },
+      OP_4: { description: 'Push 4 onto the stack', category: 'Constants', execute: () => this.push('4') },
+      OP_5: { description: 'Push 5 onto the stack', category: 'Constants', execute: () => this.push('5') },
+      OP_6: { description: 'Push 6 onto the stack', category: 'Constants', execute: () => this.push('6') },
+      OP_7: { description: 'Push 7 onto the stack', category: 'Constants', execute: () => this.push('7') },
+      OP_8: { description: 'Push 8 onto the stack', category: 'Constants', execute: () => this.push('8') },
+      OP_9: { description: 'Push 9 onto the stack', category: 'Constants', execute: () => this.push('9') },
+      OP_10: { description: 'Push 10 onto the stack', category: 'Constants', execute: () => this.push('10') },
 
-            // Constants
-            'OP_0': {
-                name: 'OP_0',
-                description: 'Pushes empty array onto stack',
-                category: 'Constants',
-                execute: () => this.pushZero()
-            },
-            'OP_1': {
-                name: 'OP_1',
-                description: 'Pushes 1 onto stack',
-                category: 'Constants',
-                execute: () => this.pushOne()
-            },
-            'OP_2': {
-                name: 'OP_2',
-                description: 'Pushes 2 onto stack',
-                category: 'Constants',
-                execute: () => this.pushTwo()
-            },
-            'OP_3': {
-                name: 'OP_3',
-                description: 'Pushes 3 onto stack',
-                category: 'Constants',
-                execute: () => this.pushThree()
-            },
-            'OP_4': {
-                name: 'OP_4',
-                description: 'Pushes 4 onto stack',
-                category: 'Constants',
-                execute: () => this.pushFour()
-            },
-            'OP_5': {
-                name: 'OP_5',
-                description: 'Pushes 5 onto stack',
-                category: 'Constants',
-                execute: () => this.pushFive()
-            },
+      OP_VERIFY: { description: 'Fail unless the top item is true', category: 'Verification', execute: () => this.verify() },
+      OP_RETURN: { description: 'Immediately fail execution', category: 'Verification', execute: () => this.returnOp() }
+    };
+  }
 
-            // Verification
-            'OP_VERIFY': {
-                name: 'OP_VERIFY',
-                description: 'Marks transaction as invalid if top stack value is not true',
-                category: 'Verification',
-                execute: () => this.verify()
-            },
-            'OP_RETURN': {
-                name: 'OP_RETURN',
-                description: 'Marks transaction as invalid',
-                category: 'Verification',
-                execute: () => this.returnOp()
-            }
-        };
-    }
+  initializeSampleScripts() {
+    return {
+      basic: 'OP_1 OP_2 OP_ADD OP_DUP',
+      comparison: 'OP_5 OP_3 OP_ADD OP_8 OP_EQUAL',
+      stack: 'OP_1 OP_2 OP_3 OP_ROT OP_SWAP',
+      verify: 'OP_2 OP_3 OP_ADD OP_5 OP_EQUALVERIFY OP_1'
+    };
+  }
 
-    initializeSampleScripts() {
-        return {
-            basic: "OP_1 OP_2 OP_ADD OP_DUP",
-            comparison: "OP_5 OP_3 OP_ADD OP_8 OP_EQUAL",
-            multisig: "OP_2 OP_1 OP_1 OP_1 OP_3 OP_CHECKMULTISIG",
-            advanced: "OP_1 OP_2 OP_3 OP_ROT OP_SWAP OP_ADD OP_DUP OP_EQUAL"
-        };
-    }
+  run(script) {
+    const tokens = this.tokenize(script);
+    this.stack = [];
 
-    initializeUI() {
-        this.renderOpcodes();
-    }
-
-    renderOpcodes() {
-        const grid = document.getElementById('opcodesGrid');
-        const categories = ['Stack', 'Arithmetic', 'Comparison', 'Bitwise', 'Logical', 'Constants', 'Verification'];
-        
-        categories.forEach(category => {
-            const categoryOpcodes = Object.values(this.opcodes).filter(op => op.category === category);
-            if (categoryOpcodes.length === 0) return;
-
-            const categoryDiv = document.createElement('div');
-            categoryDiv.style.gridColumn = '1 / -1';
-            categoryDiv.innerHTML = `<h3 style="color: #4a5568; margin: 20px 0 10px 0; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">${category}</h3>`;
-            grid.appendChild(categoryDiv);
-
-            categoryOpcodes.forEach(opcode => {
-                const card = document.createElement('div');
-                card.className = 'opcode-card';
-                card.innerHTML = `
-                    <div class="opcode-name">${opcode.name}</div>
-                    <div class="opcode-desc">${opcode.description}</div>
-                `;
-                card.onclick = () => this.insertOpcode(opcode.name);
-                grid.appendChild(card);
-            });
-        });
-    }
-
-    insertOpcode(opcodeName) {
-        const textarea = document.getElementById('scriptInput');
-        const currentValue = textarea.value;
-        const newValue = currentValue + (currentValue ? ' ' : '') + opcodeName;
-        textarea.value = newValue;
-        textarea.focus();
-    }
-
-    // Stack manipulation operations
-    dup() {
-        if (this.stack.length === 0) throw new Error('Stack is empty');
-        this.stack.push(this.stack[this.stack.length - 1]);
-    }
-
-    dup2() {
-        if (this.stack.length < 2) throw new Error('Not enough items on stack');
-        const top = this.stack[this.stack.length - 1];
-        const second = this.stack[this.stack.length - 2];
-        this.stack.push(second, top);
-    }
-
-    drop() {
-        if (this.stack.length === 0) throw new Error('Stack is empty');
-        this.stack.pop();
-    }
-
-    swap() {
-        if (this.stack.length < 2) throw new Error('Not enough items on stack');
-        const top = this.stack.pop();
-        const second = this.stack.pop();
-        this.stack.push(top, second);
-    }
-
-    over() {
-        if (this.stack.length < 2) throw new Error('Not enough items on stack');
-        this.stack.push(this.stack[this.stack.length - 2]);
-    }
-
-    rot() {
-        if (this.stack.length < 3) throw new Error('Not enough items on stack');
-        const top = this.stack.pop();
-        const second = this.stack.pop();
-        const third = this.stack.pop();
-        this.stack.push(second, top, third);
-    }
-
-    // Arithmetic operations
-    add() {
-        if (this.stack.length < 2) throw new Error('Not enough numbers to add');
-        const b = this.parseNumber(this.stack.pop());
-        const a = this.parseNumber(this.stack.pop());
-        this.stack.push((a + b).toString());
-    }
-
-    sub() {
-        if (this.stack.length < 2) throw new Error('Not enough numbers to subtract');
-        const b = this.parseNumber(this.stack.pop());
-        const a = this.parseNumber(this.stack.pop());
-        this.stack.push((a - b).toString());
-    }
-
-    mul() {
-        if (this.stack.length < 2) throw new Error('Not enough numbers to multiply');
-        const b = this.parseNumber(this.stack.pop());
-        const a = this.parseNumber(this.stack.pop());
-        this.stack.push((a * b).toString());
-    }
-
-    div() {
-        if (this.stack.length < 2) throw new Error('Not enough numbers to divide');
-        const b = this.parseNumber(this.stack.pop());
-        const a = this.parseNumber(this.stack.pop());
-        if (b === 0) throw new Error('Division by zero');
-        this.stack.push(Math.floor(a / b).toString());
-    }
-
-    mod() {
-        if (this.stack.length < 2) throw new Error('Not enough numbers for modulo');
-        const b = this.parseNumber(this.stack.pop());
-        const a = this.parseNumber(this.stack.pop());
-        if (b === 0) throw new Error('Modulo by zero');
-        this.stack.push((a % b).toString());
-    }
-
-    // Comparison operations
-    equal() {
-        if (this.stack.length < 2) throw new Error('Not enough values to compare');
-        const b = this.stack.pop();
-        const a = this.stack.pop();
-        this.stack.push(a === b ? '1' : '0');
-    }
-
-    equalVerify() {
-        this.equal();
-        this.verify();
-    }
-
-    oneEqual() {
-        if (this.stack.length === 0) throw new Error('Stack is empty');
-        const value = this.stack.pop();
-        this.stack.push(value === '1' ? '1' : '0');
-    }
-
-    zeroNotEqual() {
-        if (this.stack.length === 0) throw new Error('Stack is empty');
-        const value = this.stack.pop();
-        this.stack.push(value !== '0' ? '1' : '0');
-    }
-
-    // Bitwise operations
-    and() {
-        if (this.stack.length < 2) throw new Error('Not enough values for AND');
-        const b = this.parseNumber(this.stack.pop());
-        const a = this.parseNumber(this.stack.pop());
-        this.stack.push((a & b).toString());
-    }
-
-    or() {
-        if (this.stack.length < 2) throw new Error('Not enough values for OR');
-        const b = this.parseNumber(this.stack.pop());
-        const a = this.parseNumber(this.stack.pop());
-        this.stack.push((a | b).toString());
-    }
-
-    xor() {
-        if (this.stack.length < 2) throw new Error('Not enough values for XOR');
-        const b = this.parseNumber(this.stack.pop());
-        const a = this.parseNumber(this.stack.pop());
-        this.stack.push((a ^ b).toString());
-    }
-
-    not() {
-        if (this.stack.length === 0) throw new Error('Stack is empty');
-        const value = this.parseNumber(this.stack.pop());
-        this.stack.push((~value >>> 0).toString());
-    }
-
-    // Logical operations
-    boolAnd() {
-        if (this.stack.length < 2) throw new Error('Not enough values for boolean AND');
-        const b = this.parseNumber(this.stack.pop());
-        const a = this.parseNumber(this.stack.pop());
-        this.stack.push((a && b) ? '1' : '0');
-    }
-
-    boolOr() {
-        if (this.stack.length < 2) throw new Error('Not enough values for boolean OR');
-        const b = this.parseNumber(this.stack.pop());
-        const a = this.parseNumber(this.stack.pop());
-        this.stack.push((a || b) ? '1' : '0');
-    }
-
-    // Constants
-    pushZero() { this.stack.push('0'); }
-    pushOne() { this.stack.push('1'); }
-    pushTwo() { this.stack.push('2'); }
-    pushThree() { this.stack.push('3'); }
-    pushFour() { this.stack.push('4'); }
-    pushFive() { this.stack.push('5'); }
-
-    // Verification
-    verify() {
-        if (this.stack.length === 0) throw new Error('Stack is empty');
-        const value = this.stack.pop();
-        if (value !== '1') throw new Error('Verification failed');
-    }
-
-    returnOp() {
-        throw new Error('OP_RETURN: Transaction marked as invalid');
-    }
-
-    // Utility functions
-    parseNumber(value) {
-        const num = parseInt(value, 10);
-        if (isNaN(num)) throw new Error(`Invalid number: ${value}`);
-        return num;
-    }
-
-    runScript(script) {
-        this.stack = [];
-        const tokens = script.trim().split(/\s+/);
-        
-        for (let i = 0; i < tokens.length; i++) {
-            const token = tokens[i];
-            
-            if (this.opcodes[token]) {
-                try {
-                    this.opcodes[token].execute();
-                } catch (error) {
-                    throw new Error(`Error at token ${i + 1} (${token}): ${error.message}`);
-                }
-            } else {
-                // Treat as literal value
-                this.stack.push(token);
-            }
-        }
-    }
-
-    renderStack() {
-        const container = document.getElementById('stackContainer');
-        
-        if (this.stack.length === 0) {
-            container.innerHTML = `
-                <div style="text-align: center; color: #a0aec0; margin-top: 100px;">
-                    <i class="fas fa-layer-group" style="font-size: 3rem; margin-bottom: 10px;"></i>
-                    <p>Stack will appear here when you run a script</p>
-                </div>
-            `;
-            return;
+    tokens.forEach((token, index) => {
+      try {
+        if (this.opcodes[token]) {
+          this.opcodes[token].execute();
+          return;
         }
 
-        container.innerHTML = this.stack.map((item, index) => `
-            <div class="stack-item" style="animation-delay: ${index * 0.1}s">
-                <span>${item}</span>
-                <span style="opacity: 0.7; font-size: 0.8rem;">#${this.stack.length - index}</span>
-            </div>
-        `).join('');
-    }
+        if (this.isLiteral(token)) {
+          this.push(token);
+          return;
+        }
 
-    showStatus(message, type = 'success') {
-        const statusDiv = document.getElementById('status');
-        statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
-        setTimeout(() => {
-            statusDiv.innerHTML = '';
-        }, 5000);
-    }
+        throw new Error(`Unsupported token: ${token}`);
+      } catch (error) {
+        throw new Error(`Token ${index + 1} (${token}): ${error.message}`);
+      }
+    });
+
+    return [...this.stack];
+  }
+
+  tokenize(script) {
+    return script.trim().split(/\s+/).filter(Boolean);
+  }
+
+  isLiteral(token) {
+    return /^-?\d+$/.test(token);
+  }
+
+  push(value) {
+    this.stack.push(String(value));
+  }
+
+  requireStackSize(size, message = 'Not enough items on stack') {
+    if (this.stack.length < size) throw new Error(message);
+  }
+
+  popNumber() {
+    this.requireStackSize(1, 'Stack is empty');
+    const value = this.stack.pop();
+    const number = Number.parseInt(value, 10);
+    if (!Number.isSafeInteger(number)) throw new Error(`Invalid number: ${value}`);
+    return number;
+  }
+
+  isTrue(value) {
+    return value !== '0' && value !== '';
+  }
+
+  dup() {
+    this.requireStackSize(1, 'Stack is empty');
+    this.push(this.stack[this.stack.length - 1]);
+  }
+
+  dup2() {
+    this.requireStackSize(2);
+    const second = this.stack[this.stack.length - 2];
+    const top = this.stack[this.stack.length - 1];
+    this.push(second);
+    this.push(top);
+  }
+
+  drop() {
+    this.requireStackSize(1, 'Stack is empty');
+    this.stack.pop();
+  }
+
+  swap() {
+    this.requireStackSize(2);
+    const top = this.stack.pop();
+    const second = this.stack.pop();
+    this.push(top);
+    this.push(second);
+  }
+
+  over() {
+    this.requireStackSize(2);
+    this.push(this.stack[this.stack.length - 2]);
+  }
+
+  rot() {
+    this.requireStackSize(3);
+    const top = this.stack.pop();
+    const second = this.stack.pop();
+    const third = this.stack.pop();
+    this.push(second);
+    this.push(top);
+    this.push(third);
+  }
+
+  add() {
+    const b = this.popNumber();
+    const a = this.popNumber();
+    this.push(a + b);
+  }
+
+  sub() {
+    const b = this.popNumber();
+    const a = this.popNumber();
+    this.push(a - b);
+  }
+
+  mul() {
+    const b = this.popNumber();
+    const a = this.popNumber();
+    this.push(a * b);
+  }
+
+  div() {
+    const b = this.popNumber();
+    const a = this.popNumber();
+    if (b === 0) throw new Error('Division by zero');
+    this.push(Math.trunc(a / b));
+  }
+
+  mod() {
+    const b = this.popNumber();
+    const a = this.popNumber();
+    if (b === 0) throw new Error('Modulo by zero');
+    this.push(a % b);
+  }
+
+  equal() {
+    this.requireStackSize(2);
+    const b = this.stack.pop();
+    const a = this.stack.pop();
+    this.push(a === b ? '1' : '0');
+  }
+
+  equalVerify() {
+    this.equal();
+    this.verify();
+  }
+
+  oneEqual() {
+    this.requireStackSize(1, 'Stack is empty');
+    this.push(this.stack.pop() === '1' ? '1' : '0');
+  }
+
+  zeroNotEqual() {
+    this.requireStackSize(1, 'Stack is empty');
+    this.push(this.stack.pop() !== '0' ? '1' : '0');
+  }
+
+  and() {
+    const b = this.popNumber();
+    const a = this.popNumber();
+    this.push(a & b);
+  }
+
+  or() {
+    const b = this.popNumber();
+    const a = this.popNumber();
+    this.push(a | b);
+  }
+
+  xor() {
+    const b = this.popNumber();
+    const a = this.popNumber();
+    this.push(a ^ b);
+  }
+
+  not() {
+    const value = this.popNumber();
+    this.push(value === 0 ? '1' : '0');
+  }
+
+  boolAnd() {
+    const b = this.stack.pop();
+    const a = this.stack.pop();
+    if (a === undefined || b === undefined) throw new Error('Not enough items on stack');
+    this.push(this.isTrue(a) && this.isTrue(b) ? '1' : '0');
+  }
+
+  boolOr() {
+    const b = this.stack.pop();
+    const a = this.stack.pop();
+    if (a === undefined || b === undefined) throw new Error('Not enough items on stack');
+    this.push(this.isTrue(a) || this.isTrue(b) ? '1' : '0');
+  }
+
+  verify() {
+    this.requireStackSize(1, 'Stack is empty');
+    const value = this.stack.pop();
+    if (!this.isTrue(value)) throw new Error('Verification failed');
+  }
+
+  returnOp() {
+    throw new Error('OP_RETURN failed execution');
+  }
 }
 
-// Global functions for UI interaction
-const engine = new BitcoinScriptEngine();
+class PlaygroundUI {
+  constructor(engine) {
+    this.engine = engine;
+    this.scriptInput = document.getElementById('scriptInput');
+    this.stackContainer = document.getElementById('stackContainer');
+    this.opcodesGrid = document.getElementById('opcodesGrid');
+    this.status = document.getElementById('status');
 
-function runScript() {
-    const script = document.getElementById('scriptInput').value.trim();
-    
+    this.bindEvents();
+    this.renderOpcodes();
+    this.renderStack();
+    this.loadScriptFromUrl();
+  }
+
+  bindEvents() {
+    document.querySelector('[data-action="run"]').addEventListener('click', () => this.runScript());
+    document.querySelector('[data-action="clear"]').addEventListener('click', () => this.clearScript());
+    document.querySelector('[data-action="share"]').addEventListener('click', () => this.shareScript());
+
+    document.querySelectorAll('[data-sample]').forEach((button) => {
+      button.addEventListener('click', () => this.loadSample(button.dataset.sample));
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+        event.preventDefault();
+        this.runScript();
+      }
+    });
+  }
+
+  runScript() {
+    const script = this.scriptInput.value.trim();
     if (!script) {
-        engine.showStatus('Please enter a script to run', 'error');
-        return;
+      this.showStatus('Please enter a script to run.', 'error');
+      return;
     }
 
     try {
-        engine.runScript(script);
-        engine.renderStack();
-        engine.showStatus(`✅ Script executed successfully! Stack has ${engine.stack.length} items.`);
+      const stack = this.engine.run(script);
+      this.renderStack(stack);
+      this.showStatus(`Script executed successfully. Stack items: ${stack.length}.`, 'success');
     } catch (error) {
-        engine.showStatus(`❌ ${error.message}`, 'error');
-        engine.renderStack();
+      this.renderStack(this.engine.stack);
+      this.showStatus(error.message, 'error');
     }
-}
+  }
 
-function clearScript() {
-    document.getElementById('scriptInput').value = '';
-    engine.stack = [];
-    engine.renderStack();
-    document.getElementById('status').innerHTML = '';
-}
+  clearScript() {
+    this.scriptInput.value = '';
+    this.engine.stack = [];
+    this.renderStack();
+    this.clearStatus();
+  }
 
-function shareScript() {
-    const script = document.getElementById('scriptInput').value;
+  async shareScript() {
+    const script = this.scriptInput.value.trim();
     if (!script) {
-        engine.showStatus('No script to share', 'error');
-        return;
+      this.showStatus('No script to share.', 'error');
+      return;
     }
 
-    const url = `${window.location.origin}${window.location.pathname}?script=${encodeURIComponent(script)}`;
-    navigator.clipboard.writeText(url).then(() => {
-        engine.showStatus('🔗 Script URL copied to clipboard!');
-    }).catch(() => {
-        engine.showStatus('Failed to copy URL', 'error');
+    const url = new URL(window.location.href);
+    url.searchParams.set('script', script);
+
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      this.showStatus('Share URL copied to clipboard.', 'success');
+    } catch {
+      this.showStatus('Clipboard unavailable. Copy the URL from the address bar after sharing.', 'error');
+      window.history.replaceState(null, '', url.toString());
+    }
+  }
+
+  loadSample(type) {
+    const script = this.engine.sampleScripts[type];
+    if (!script) return;
+    this.scriptInput.value = script;
+    this.showStatus(`Loaded sample: ${type}.`, 'success');
+  }
+
+  loadScriptFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const script = params.get('script');
+    if (!script) return;
+    this.scriptInput.value = script;
+    this.runScript();
+  }
+
+  renderOpcodes() {
+    this.opcodesGrid.textContent = '';
+    const categories = [...new Set(Object.values(this.engine.opcodes).map((opcode) => opcode.category))];
+
+    categories.forEach((category) => {
+      const title = document.createElement('h3');
+      title.textContent = category;
+      title.style.gridColumn = '1 / -1';
+      this.opcodesGrid.appendChild(title);
+
+      Object.entries(this.engine.opcodes)
+        .filter(([, opcode]) => opcode.category === category)
+        .forEach(([name, opcode]) => {
+          const card = document.createElement('button');
+          card.type = 'button';
+          card.className = 'opcode-card';
+          card.addEventListener('click', () => this.insertOpcode(name));
+
+          const opcodeName = document.createElement('div');
+          opcodeName.className = 'opcode-name';
+          opcodeName.textContent = name;
+
+          const description = document.createElement('div');
+          description.className = 'opcode-desc';
+          description.textContent = opcode.description;
+
+          card.appendChild(opcodeName);
+          card.appendChild(description);
+          this.opcodesGrid.appendChild(card);
+        });
     });
+  }
+
+  insertOpcode(opcodeName) {
+    const existing = this.scriptInput.value.trim();
+    this.scriptInput.value = existing ? `${existing} ${opcodeName}` : opcodeName;
+    this.scriptInput.focus();
+  }
+
+  renderStack(stack = this.engine.stack) {
+    this.stackContainer.textContent = '';
+
+    if (!stack || stack.length === 0) {
+      const empty = document.createElement('p');
+      empty.className = 'empty-stack';
+      empty.textContent = 'Stack will appear here when you run a script.';
+      this.stackContainer.appendChild(empty);
+      return;
+    }
+
+    stack.forEach((item, index) => {
+      const row = document.createElement('div');
+      row.className = 'stack-item';
+
+      const value = document.createElement('span');
+      value.textContent = item;
+
+      const label = document.createElement('span');
+      label.textContent = `#${stack.length - index}`;
+
+      row.appendChild(value);
+      row.appendChild(label);
+      this.stackContainer.appendChild(row);
+    });
+  }
+
+  showStatus(message, type) {
+    this.status.textContent = '';
+    const box = document.createElement('div');
+    box.className = `status ${type}`;
+    box.textContent = message;
+    this.status.appendChild(box);
+  }
+
+  clearStatus() {
+    this.status.textContent = '';
+  }
 }
 
-function loadSample(type) {
-    const script = engine.sampleScripts[type];
-    if (script) {
-        document.getElementById('scriptInput').value = script;
-        engine.showStatus(`📝 Loaded ${type} sample script`);
-    }
-}
-
-// Load script from URL parameters
-window.addEventListener('load', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const script = urlParams.get('script');
-    if (script) {
-        document.getElementById('scriptInput').value = decodeURIComponent(script);
-        runScript();
-    }
-});
-
-// Add keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && e.key === 'Enter') {
-        runScript();
-    }
+window.addEventListener('DOMContentLoaded', () => {
+  new PlaygroundUI(new BitcoinScriptEngine());
 });
