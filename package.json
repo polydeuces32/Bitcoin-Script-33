@@ -1,28 +1,15 @@
 {
   "name": "bitcoin-script-playground",
-  "version": "1.0.0",
-  "description": "Interactive Learning Platform for Bitcoin Script Development",
+  "version": "1.1.0",
+  "description": "Educational Bitcoin Script playground with stack visualization",
   "main": "index.html",
   "scripts": {
     "start": "python3 -m http.server 8000",
-    "serve": "npx serve .",
     "dev": "npx live-server --port=8000 --open=/index.html",
-    "build": "echo 'No build process needed for vanilla JS'",
-    "test": "echo 'No tests specified yet'"
+    "serve": "npx serve .",
+    "test": "node -e \"console.log('No automated tests yet')\""
   },
-  "keywords": [
-    "bitcoin",
-    "script",
-    "blockchain",
-    "cryptocurrency",
-    "education",
-    "learning",
-    "playground",
-    "interactive",
-    "opcodes",
-    "stack",
-    "programming"
-  ],
+  "keywords": ["bitcoin","script","education","playground","stack"],
   "author": "polydeuces32 <polydeuces32@github.com>",
   "license": "MIT",
   "repository": {
@@ -38,11 +25,6 @@
     "serve": "^14.2.1"
   },
   "engines": {
-    "node": ">=14.0.0"
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+    "node": ">=18"
+  }
 }

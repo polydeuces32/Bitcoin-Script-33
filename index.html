@@ -1,310 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bitcoin Script Playground - Interactive Learning Platform</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            color: white;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .panel {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .panel h2 {
-            color: #4a5568;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .script-input {
-            width: 100%;
-            height: 200px;
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            resize: vertical;
-            transition: border-color 0.3s;
-        }
-
-        .script-input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin: 15px 0;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #5a67d8;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: #e2e8f0;
-            color: #4a5568;
-        }
-
-        .btn-secondary:hover {
-            background: #cbd5e0;
-        }
-
-        .btn-success {
-            background: #48bb78;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #38a169;
-        }
-
-        .stack-container {
-            min-height: 300px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 15px;
-            background: #f7fafc;
-        }
-
-        .stack-item {
-            background: #667eea;
-            color: white;
-            padding: 10px 15px;
-            margin: 5px 0;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-weight: 600;
-            animation: slideIn 0.3s ease-out;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .stack-item:first-child {
-            background: #48bb78;
-        }
-
-        .stack-item:last-child {
-            background: #ed8936;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .opcodes-panel {
-            grid-column: 1 / -1;
-            margin-top: 20px;
-        }
-
-        .opcodes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .opcode-card {
-            background: #f7fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .opcode-card:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .opcode-name {
-            font-weight: 700;
-            color: #4a5568;
-            margin-bottom: 5px;
-        }
-
-        .opcode-desc {
-            font-size: 0.9rem;
-            color: #718096;
-        }
-
-        .status {
-            padding: 10px;
-            border-radius: 8px;
-            margin: 10px 0;
-            font-weight: 600;
-        }
-
-        .status.success {
-            background: #c6f6d5;
-            color: #22543d;
-            border: 1px solid #9ae6b4;
-        }
-
-        .status.error {
-            background: #fed7d7;
-            color: #742a2a;
-            border: 1px solid #feb2b2;
-        }
-
-        .samples {
-            margin-top: 20px;
-        }
-
-        .sample-btn {
-            background: #ed8936;
-            color: white;
-            margin: 5px;
-        }
-
-        .sample-btn:hover {
-            background: #dd6b20;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bitcoin Script Playground</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1><i class="fab fa-bitcoin"></i> Bitcoin Script Playground</h1>
-            <p>Interactive Learning Platform for Bitcoin Script Development</p>
+  <main class="container">
+    <header class="header">
+      <h1><i class="fab fa-bitcoin" aria-hidden="true"></i> Bitcoin Script Playground</h1>
+      <p>A visual stack-based learning tool for Bitcoin Script concepts.</p>
+    </header>
+
+    <section class="notice" aria-label="Educational disclaimer">
+      <strong>Educational mode:</strong> this playground uses a simplified JavaScript interpreter. It is not a Bitcoin Core-compatible consensus engine and must not be used to validate real transactions.
+    </section>
+
+    <section class="main-content" aria-label="Script editor and stack visualization">
+      <article class="panel">
+        <h2><i class="fas fa-code" aria-hidden="true"></i> Script Editor</h2>
+        <label class="sr-only" for="scriptInput">Bitcoin Script input</label>
+        <textarea id="scriptInput" class="script-input" placeholder="Enter your Bitcoin Script here...
+Example: OP_1 OP_2 OP_ADD OP_DUP">OP_1 OP_2 OP_ADD OP_DUP</textarea>
+
+        <div class="controls">
+          <button class="btn btn-primary" type="button" data-action="run">
+            <i class="fas fa-play" aria-hidden="true"></i> Run Script
+          </button>
+          <button class="btn btn-secondary" type="button" data-action="clear">
+            <i class="fas fa-trash" aria-hidden="true"></i> Clear
+          </button>
+          <button class="btn btn-success" type="button" data-action="share">
+            <i class="fas fa-share" aria-hidden="true"></i> Share
+          </button>
         </div>
 
-        <div class="main-content">
-            <div class="panel">
-                <h2><i class="fas fa-code"></i> Script Editor</h2>
-                <textarea id="scriptInput" class="script-input" placeholder="Enter your Bitcoin Script here...&#10;Example: OP_1 OP_2 OP_ADD OP_DUP">OP_1 OP_2 OP_ADD OP_DUP</textarea>
-                
-                <div class="controls">
-                    <button class="btn btn-primary" onclick="runScript()">
-                        <i class="fas fa-play"></i> Run Script
-                    </button>
-                    <button class="btn btn-secondary" onclick="clearScript()">
-                        <i class="fas fa-trash"></i> Clear
-                    </button>
-                    <button class="btn btn-success" onclick="shareScript()">
-                        <i class="fas fa-share"></i> Share
-                    </button>
-                </div>
-
-                <div class="samples">
-                    <h3>Sample Scripts:</h3>
-                    <button class="btn sample-btn" onclick="loadSample('basic')">Basic Math</button>
-                    <button class="btn sample-btn" onclick="loadSample('comparison')">Comparison</button>
-                    <button class="btn sample-btn" onclick="loadSample('multisig')">Multi-sig</button>
-                    <button class="btn sample-btn" onclick="loadSample('advanced')">Advanced</button>
-                </div>
-
-                <div id="status"></div>
-            </div>
-
-            <div class="panel">
-                <h2><i class="fas fa-layer-group"></i> Stack Visualization</h2>
-                <div id="stackContainer" class="stack-container">
-                    <div style="text-align: center; color: #a0aec0; margin-top: 100px;">
-                        <i class="fas fa-layer-group" style="font-size: 3rem; margin-bottom: 10px;"></i>
-                        <p>Stack will appear here when you run a script</p>
-                    </div>
-                </div>
-            </div>
+        <div class="samples">
+          <h3>Sample Scripts</h3>
+          <button class="btn sample-btn" type="button" data-sample="basic">Basic Math</button>
+          <button class="btn sample-btn" type="button" data-sample="comparison">Comparison</button>
+          <button class="btn sample-btn" type="button" data-sample="stack">Stack Ops</button>
+          <button class="btn sample-btn" type="button" data-sample="verify">Verify</button>
         </div>
 
-        <div class="panel opcodes-panel">
-            <h2><i class="fas fa-puzzle-piece"></i> Available Opcodes</h2>
-            <div class="opcodes-grid" id="opcodesGrid">
-                <!-- Opcodes will be populated by JavaScript -->
-            </div>
-        </div>
-    </div>
+        <div id="status" role="status" aria-live="polite"></div>
+      </article>
 
-    <script src="script.js"></script>
+      <article class="panel">
+        <h2><i class="fas fa-layer-group" aria-hidden="true"></i> Stack Visualization</h2>
+        <div id="stackContainer" class="stack-container"></div>
+      </article>
+    </section>
+
+    <section class="panel opcodes-panel" aria-label="Available opcodes">
+      <h2><i class="fas fa-puzzle-piece" aria-hidden="true"></i> Available Opcodes</h2>
+      <div class="opcodes-grid" id="opcodesGrid"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
