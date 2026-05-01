@@ -3,60 +3,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bitcoin Script Playground</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <title>Bitcoin Script Lab</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main class="container">
-    <header class="header">
-      <h1><i class="fab fa-bitcoin" aria-hidden="true"></i> Bitcoin Script Playground</h1>
-      <p>A visual stack-based learning tool for Bitcoin Script concepts.</p>
+  <main class="terminal-shell">
+    <header class="terminal-header">
+      <div>
+        <p class="eyebrow">POLYDEUCES32 / BTC DEV LAB</p>
+        <h1>Bitcoin Script Lab<span class="cursor">_</span></h1>
+        <p class="subtitle">Trace Bitcoin Script concepts opcode by opcode with live stack state.</p>
+      </div>
+      <div class="status-pill">EDUCATIONAL SIMULATOR</div>
     </header>
 
-    <section class="notice" aria-label="Educational disclaimer">
-      <strong>Educational mode:</strong> this playground uses a simplified JavaScript interpreter. It is not a Bitcoin Core-compatible consensus engine and must not be used to validate real transactions.
+    <section class="notice">
+      This lab uses a simplified JavaScript interpreter. It is not Bitcoin Core-compatible and must not be used to validate real transactions.
     </section>
 
-    <section class="main-content" aria-label="Script editor and stack visualization">
-      <article class="panel">
-        <h2><i class="fas fa-code" aria-hidden="true"></i> Script Editor</h2>
+    <section class="lab-grid">
+      <article class="panel editor-panel">
+        <div class="panel-title">01 / SCRIPT INPUT</div>
         <label class="sr-only" for="scriptInput">Bitcoin Script input</label>
-        <textarea id="scriptInput" class="script-input" placeholder="Enter your Bitcoin Script here...
-Example: OP_1 OP_2 OP_ADD OP_DUP">OP_1 OP_2 OP_ADD OP_DUP</textarea>
-
+        <textarea id="scriptInput" class="script-input" spellcheck="false">OP_1 OP_2 OP_ADD OP_DUP</textarea>
         <div class="controls">
-          <button class="btn btn-primary" type="button" data-action="run">
-            <i class="fas fa-play" aria-hidden="true"></i> Run Script
-          </button>
-          <button class="btn btn-secondary" type="button" data-action="clear">
-            <i class="fas fa-trash" aria-hidden="true"></i> Clear
-          </button>
-          <button class="btn btn-success" type="button" data-action="share">
-            <i class="fas fa-share" aria-hidden="true"></i> Share
-          </button>
+          <button class="btn primary" type="button" data-action="run">Run All</button>
+          <button class="btn" type="button" data-action="step">Step</button>
+          <button class="btn" type="button" data-action="reset">Reset Trace</button>
+          <button class="btn ghost" type="button" data-action="clear">Clear</button>
+          <button class="btn ghost" type="button" data-action="share">Share</button>
         </div>
-
         <div class="samples">
-          <h3>Sample Scripts</h3>
-          <button class="btn sample-btn" type="button" data-sample="basic">Basic Math</button>
-          <button class="btn sample-btn" type="button" data-sample="comparison">Comparison</button>
-          <button class="btn sample-btn" type="button" data-sample="stack">Stack Ops</button>
-          <button class="btn sample-btn" type="button" data-sample="verify">Verify</button>
+          <button type="button" data-sample="basic">Basic</button>
+          <button type="button" data-sample="comparison">Compare</button>
+          <button type="button" data-sample="stack">Stack</button>
+          <button type="button" data-sample="verify">Verify</button>
         </div>
-
-        <div id="status" role="status" aria-live="polite"></div>
+        <div id="status" class="status-line" role="status" aria-live="polite"></div>
       </article>
 
-      <article class="panel">
-        <h2><i class="fas fa-layer-group" aria-hidden="true"></i> Stack Visualization</h2>
+      <article class="panel trace-panel">
+        <div class="panel-title">02 / EXECUTION TRACE</div>
+        <div id="traceContainer" class="trace-container"></div>
+      </article>
+
+      <article class="panel stack-panel">
+        <div class="panel-title">03 / STACK STATE</div>
         <div id="stackContainer" class="stack-container"></div>
       </article>
     </section>
 
-    <section class="panel opcodes-panel" aria-label="Available opcodes">
-      <h2><i class="fas fa-puzzle-piece" aria-hidden="true"></i> Available Opcodes</h2>
-      <div class="opcodes-grid" id="opcodesGrid"></div>
+    <section class="panel opcode-panel">
+      <div class="panel-title">04 / OPCODE REFERENCE</div>
+      <div id="opcodesGrid" class="opcodes-grid"></div>
     </section>
   </main>
 
