@@ -1,19 +1,20 @@
-# Bitcoin Script Playground
+# Bitcoin Script Lab
 
-A browser-based educational playground for learning Bitcoin Script fundamentals through opcode execution and stack visualization.
+A terminal-style educational lab for learning Bitcoin Script concepts through opcode-by-opcode execution tracing and live stack visualization.
 
-## Important Note
+## v2 Highlights
 
-This project uses a simplified JavaScript interpreter for learning purposes. It is **not** Bitcoin Core-compatible and should not be used to validate real transactions.
+- Terminal-inspired Bitcoin developer UI
+- Step-by-step execution trace
+- Run All / Step / Reset Trace controls
+- Live stack state panel
+- Opcode reference panel
+- Shareable scripts through URL parameters
+- Zero-build static web app
 
-## Features
+## Important Scope Note
 
-- Interactive script editor
-- Visual stack rendering
-- Sample scripts
-- Shareable URLs
-- Opcode reference cards
-- Zero-build static site
+Bitcoin Script Lab uses a simplified JavaScript interpreter for learning purposes. It is **not** Bitcoin Core-compatible and must not be used to validate real transactions.
 
 ## Quick Start
 
@@ -23,19 +24,38 @@ cd bitcoin-script-playground
 python3 -m http.server 8000
 ```
 
-Open http://localhost:8000
+Open:
 
-## Supported Scope
+```text
+http://localhost:8000
+```
 
-This tool demonstrates common stack, arithmetic, comparison, and verification concepts. Some opcode behavior is intentionally simplified.
+## Example Script
+
+```text
+OP_1 OP_2 OP_ADD OP_DUP
+```
+
+Trace result:
+
+```text
+01 > OP_1      [] -> [1]
+02 > OP_2      [1] -> [1, 2]
+03 > OP_ADD    [1, 2] -> [3]
+04 > OP_DUP    [3] -> [3, 3]
+```
+
+## Why This Exists
+
+Bitcoin Script is stack-based and difficult to understand from static documentation alone. This project makes the stack transitions visible so beginners can learn by running and stepping through scripts.
 
 ## Roadmap
 
-- Pure engine/test separation
-- More accurate script semantics
-- Additional opcode coverage
-- Transaction templates
-- Testnet teaching mode
+- Animated stack transitions
+- Real transaction template examples
+- Hashlock and timelock teaching modes
+- Miniscript learning mode
+- Better automated tests
 
 ## License
 
