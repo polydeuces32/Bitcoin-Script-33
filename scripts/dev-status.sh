@@ -33,7 +33,7 @@ else
 fi
 
 line() {
-  printf '%s%s\n' "$DIM" '────────────────────────────────────────────────────────────────────────────' "$RESET"
+  printf '%s%s%s\n' "$DIM" '────────────────────────────────────────────────────────────────────────────' "$RESET"
 }
 
 print_window_header() {
@@ -46,7 +46,7 @@ print_prompt() {
   printf '\n%s%s@Mac%s %s~%s ./scripts/dev-status.sh\n\n' "$GREEN" "giancarlovizhnay" "$RESET" "$DIM" "$RESET"
 }
 
-print_ghost() {
+print_ghost_frame_1() {
   cat <<EOF
 ${CYAN}${DIM}             .........
 ${CYAN}${DIM}        .:+#############+:.
@@ -60,8 +60,72 @@ ${BLUE}   #######${DIM}::::${BLUE}#########${DIM}::::${BLUE}#######
 ${BLUE}   #####:${DIM}    ${BLUE}:#####:${DIM}    ${BLUE}:#####
 ${BLUE}${DIM}   .###:      :###:      :###.
 ${BLUE}${DIM}     :+.      .:+.      .+:
+${CYAN}${DIM}          ghost process waking${RESET}
+EOF
+}
+
+print_ghost_frame_2() {
+  cat <<EOF
+${CYAN}${DIM}              .........
+${CYAN}${DIM}         .:+#############+:.
+${CYAN}       .+#####################+.
+${CYAN}      +#########${WHITE}  --  ${CYAN}#########+
+${CYAN}     ##########${WHITE}  --  ${CYAN}##########
+${BLUE}    .###########################.
+${BLUE}    #############################
+${BLUE}    #############################
+${BLUE}    #######${DIM}::::${BLUE}#########${DIM}::::${BLUE}#######
+${BLUE}    #####:${DIM}    ${BLUE}:#####:${DIM}    ${BLUE}:#####
+${BLUE}${DIM}    .###:      :###:      :###.
+${BLUE}${DIM}      :+.      .:+.      .+:
+${CYAN}${DIM}           ghost process blinking${RESET}
+EOF
+}
+
+print_ghost_frame_3() {
+  cat <<EOF
+${CYAN}${DIM}             .........
+${CYAN}${DIM}        .:+#############+:.
+${CYAN}      .+#####################+.
+${CYAN}     +#########${WHITE}  OO  ${CYAN}#########+
+${CYAN}    ##########${WHITE}  OO  ${CYAN}##########
+${BLUE}   .###########################.
+${BLUE}   #############################
+${BLUE}   #############################
+${BLUE}   #######${DIM}::::${BLUE}#########${DIM}::::${BLUE}#######
+${BLUE}   #####:${DIM}    ${BLUE}:#####:${DIM}    ${BLUE}:#####
+${BLUE}${DIM}   .###:      :###:      :###.
+${BLUE}${DIM}     :+.      .:+.      .+:
 ${CYAN}${DIM}          ghost process online${RESET}
 EOF
+}
+
+print_ghost() {
+  print_ghost_frame_3
+}
+
+animate_ghost() {
+  [[ -t 1 ]] || return 0
+  [[ "${NO_GHOST_ANIMATION:-0}" == "1" ]] && return 0
+
+  local start_line
+  start_line="$(tput sc 2>/dev/null || true)"
+  tput civis 2>/dev/null || true
+
+  for _ in 1 2; do
+    tput rc 2>/dev/null || true
+    print_ghost_frame_1
+    sleep 0.16
+    tput rc 2>/dev/null || true
+    print_ghost_frame_2
+    sleep 0.12
+    tput rc 2>/dev/null || true
+    print_ghost_frame_3
+    sleep 0.18
+  done
+
+  tput cnorm 2>/dev/null || true
+  printf '\n'
 }
 
 collect_system_info() {
@@ -78,7 +142,7 @@ collect_system_info() {
   disk="$(df -h / | awk 'NR==2 {print $3 " / " $2 " (" $5 ")"}' 2>/dev/null || printf 'unknown')"
   local_ip="$(ipconfig getifaddr en0 2>/dev/null || printf 'offline')"
 
-  printf '%s%s%s\n' "$BOLD" "$CYAN" "giancarlovizhnay@Mac" "$RESET"
+  printf '%s%s%s%s\n' "$BOLD" "$CYAN" "giancarlovizhnay@Mac" "$RESET"
   printf '%s\n' "────────────────────────"
   printf '%sOS%s        : %s\n' "$ORANGE" "$RESET" "$os"
   printf '%sHost%s      : %s\n' "$ORANGE" "$RESET" "$host"
@@ -135,6 +199,7 @@ print_project_files() {
 
 print_window_header
 print_prompt
+animate_ghost
 print_status_grid
 print_repo_status
 print_project_files
