@@ -14,7 +14,14 @@
         <h1>Bitcoin Script Lab<span class="cursor">_</span></h1>
         <p class="subtitle">Trace Bitcoin Script concepts opcode by opcode with live stack state.</p>
       </div>
-      <div class="status-pill">EDUCATIONAL SIMULATOR</div>
+      <div class="header-right">
+        <div class="status-pill">EDUCATIONAL SIMULATOR</div>
+        <div class="price-ticker" id="priceTicker">
+          <span class="price-label">BTC / USD</span>
+          <span id="priceValue" class="price-value" aria-live="polite">--</span>
+          <span id="priceAge" class="price-age"></span>
+        </div>
+      </div>
     </header>
     <section class="notice">This lab uses a simplified JavaScript interpreter. It is not Bitcoin Core-compatible and must not be used to validate real transactions.</section>
     <section class="lab-grid">

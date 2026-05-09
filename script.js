@@ -45,4 +45,45 @@ class PlaygroundUI{
   insertOpcode(name){const current=this.scriptInput.value.trim();this.scriptInput.value=current?`${current} ${name}`:name;this.resetTrace();this.scriptInput.focus();}
   showStatus(msg,type){this.status.textContent=`${type.toUpperCase()}: ${msg}`;} clearStatus(){this.status.textContent='';}
 }
-window.addEventListener('DOMContentLoaded',()=>new PlaygroundUI(new BitcoinScriptEngine()));
+class PriceFetcher {
+  constructor() {
+    this.el = document.getElementById('priceValue');
+    this.ageEl = document.getElementById('priceAge');
+    this.lastFetch = null;
+    this.INTERVAL = 60_000;
+  }
+
+  async fetch() {
+    this.el.textContent = '...';
+    this.ageEl.textContent = '';
+    try {
+      const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd', { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      this.el.textContent = `$${data.bitcoin.usd.toLocaleString('en-US')}`;
+      this.el.classList.remove('price-error');
+      this.lastFetch = Date.now();
+      this.tickAge();
+    } catch {
+      this.el.textContent = 'FETCH ERR';
+      this.el.classList.add('price-error');
+    }
+  }
+
+  tickAge() {
+    if (!this.lastFetch) return;
+    const s = Math.round((Date.now() - this.lastFetch) / 1000);
+    this.ageEl.textContent = s < 5 ? 'just now' : `${s}s ago`;
+    setTimeout(() => this.tickAge(), 5000);
+  }
+
+  start() {
+    this.fetch();
+    setInterval(() => this.fetch(), this.INTERVAL);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  new PlaygroundUI(new BitcoinScriptEngine());
+  new PriceFetcher().start();
+});
