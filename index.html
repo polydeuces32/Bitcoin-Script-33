@@ -16,6 +16,40 @@
       </div>
       <div class="status-pill">EDUCATIONAL SIMULATOR</div>
     </header>
+
+    <section class="terminal-status panel" aria-label="Developer status">
+      <div class="panel-title">00 / LOCAL DEV TERMINAL</div>
+      <div class="status-terminal-grid">
+        <pre class="ascii-logo" aria-hidden="true">                     ..'
+                 ,xNMM.
+               .OMMMMo
+               lMM"
+     .;loddo:.  .olloddol;.
+   cKMMMMMMMMMMNWMMMMMMMMMM0:
+ .KMMMMMMMMMMMMMMMMMMMMMMMWd.
+ XMMMMMMMMMMMMMMMMMMMMMMMX.
+;MMMMMMMMMMMMMMMMMMMMMMMM:
+:MMMMMMMMMMMMMMMMMMMMMMMM:
+.MMMMMMMMMMMMMMMMMMMMMMMMX.
+ kMMMMMMMMMMMMMMMMMMMMMMMMWd.
+ 'XMMMMMMMMMMMMMMMMMMMMMMMMMMk
+  'XMMMMMMMMMMMMMMMMMMMMMMMMK.
+    kMMMMMMMMMMMMMMMMMMMMMMd
+     ;KMMMMMMMWXXWMMMMMMMk.
+       "cooc*"    "*coo'"</pre>
+        <div class="status-readout">
+          <div><span>User</span> giancarlovizhnay@Giancarlos-MBP</div>
+          <div><span>Project</span> Bitcoin-Script-33</div>
+          <div><span>Branch</span> main</div>
+          <div><span>Dev Tool</span> fastfetch enabled</div>
+          <div><span>Command</span> ./scripts/dev-status.sh</div>
+          <div><span>Runtime</span> python3 -m http.server 8000</div>
+          <div><span>Mode</span> local-first browser lab</div>
+        </div>
+      </div>
+      <div class="command-strip"><span>$</span> ./scripts/dev-status.sh && python3 -m http.server 8000</div>
+    </section>
+
     <section class="notice">This lab uses a simplified JavaScript interpreter. It is not Bitcoin Core-compatible and must not be used to validate real transactions.</section>
     <section class="lab-grid">
       <article class="panel editor-panel"><div class="panel-title">01 / SCRIPT INPUT</div><label class="sr-only" for="scriptInput">Bitcoin Script input</label><textarea id="scriptInput" class="script-input" spellcheck="false">OP_1 OP_2 OP_ADD OP_DUP</textarea><div class="controls"><button class="btn primary" type="button" data-action="run">Run All</button><button class="btn" type="button" data-action="step">Step</button><button class="btn" type="button" data-action="reset">Reset Trace</button><button class="btn ghost" type="button" data-action="clear">Clear</button><button class="btn ghost" type="button" data-action="share">Share</button></div><div class="samples"><button type="button" data-sample="basic">Basic</button><button type="button" data-sample="comparison">Compare</button><button type="button" data-sample="stack">Stack</button><button type="button" data-sample="verify">Verify</button></div><div id="status" class="status-line" role="status" aria-live="polite"></div></article>
