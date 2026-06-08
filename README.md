@@ -19,8 +19,8 @@ Bitcoin Script Lab uses a simplified JavaScript interpreter for learning purpose
 ## Quick Start
 
 ```bash
-git clone https://github.com/polydeuces32/bitcoin-script-playground.git
-cd bitcoin-script-playground
+git clone https://github.com/polydeuces32/Bitcoin-Script-33.git
+cd Bitcoin-Script-33
 python3 -m http.server 8000
 ```
 
